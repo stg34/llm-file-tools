@@ -7,7 +7,7 @@ license: MIT
 description: File management tools.
 """
 
-import os
+from pathlib import Path
 import shutil
 import logging
 import datetime
@@ -26,9 +26,9 @@ class Tools:
         :param folder_name: Path to the folder to create (e.g. 'documents' or 'project/docs').
         :return: A success message if the folder is created successfully.
         """
-        folder_path = os.path.join(self.base_path, folder_name)
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
+        folder_path = Path(self.base_path) / folder_name
+        if not folder_path.exists():
+            folder_path.mkdir(parents=True)
             logging.info(
                 f"Folder '{folder_name}' created successfully at {folder_path}!"
             )
@@ -43,8 +43,8 @@ class Tools:
         :param folder_name: Path to the folder to delete (e.g. 'temp' or 'project/temp').
         :return: A success message if the folder is deleted successfully.
         """
-        folder_path = os.path.join(self.base_path, folder_name)
-        if os.path.exists(folder_path):
+        folder_path = Path(self.base_path) / folder_name
+        if folder_path.exists():
             shutil.rmtree(folder_path)
             logging.info(
                 f"Folder '{folder_name}' deleted successfully from {folder_path}!"
@@ -61,10 +61,10 @@ class Tools:
         :param content: The content to write to the file.
         :return: A success message if the file is created successfully.
         """
-        file_path = os.path.join(self.base_path, file_name)
+        file_path = Path(self.base_path) / file_name
         # Ensure directory exists
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        with open(file_path, "w") as file:
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        with file_path.open("w") as file:
             file.write(content)
         logging.info(f"File '{file_name}' created successfully at {file_path}!")
         return f"File '{file_name}' created successfully!"
@@ -75,9 +75,9 @@ class Tools:
         :param file_name: Path to the file to delete (e.g. 'old.txt' or 'backup/old.txt').
         :return: A success message if the file is deleted successfully.
         """
-        file_path = os.path.join(self.base_path, file_name)
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        file_path = Path(self.base_path) / file_name
+        if file_path.exists():
+            file_path.unlink()
             logging.info(f"File '{file_name}' deleted successfully from {file_path}!")
             return f"File '{file_name}' deleted successfully!"
         else:
@@ -90,9 +90,9 @@ class Tools:
         :param file_name: Path to the file to read (e.g. 'data.txt' or 'config/settings.json').
         :return: The content of the file.
         """
-        file_path = os.path.join(self.base_path, file_name)
-        if os.path.exists(file_path):
-            with open(file_path, "r") as file:
+        file_path = Path(self.base_path) / file_name
+        if file_path.exists():
+            with file_path.open("r") as file:
                 content = file.read()
             logging.info(f"File '{file_name}' read successfully from {file_path}!")
             return content
@@ -107,10 +107,10 @@ class Tools:
         :param content: The content to write to the file.
         :return: A success message if the content is written successfully.
         """
-        file_path = os.path.join(self.base_path, file_name)
+        file_path = Path(self.base_path) / file_name
         # Ensure directory exists
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        with open(file_path, "w") as file:
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        with file_path.open("w") as file:
             file.write(content)
         logging.info(
             f"Content written to file '{file_name}' successfully at {file_path}!"
@@ -123,8 +123,8 @@ class Tools:
         :param directory: Path to the directory to list (e.g. '' for current directory, 'docs' for docs folder).
         :return: A list of files in the specified directory.
         """
-        directory_path = os.path.join(self.base_path, directory)
-        files = os.listdir(directory_path)
+        directory_path = Path(self.base_path) / directory
+        files = [file.name for file in directory_path.iterdir()]
         logging.info(f"Files listed successfully from {directory_path}!")
         return "Files in the specified directory:\n" + "\n".join(files)
 
@@ -135,13 +135,13 @@ class Tools:
         :param dest_file: Path to the destination file (e.g. 'copy.txt' or 'backup/data.csv').
         :return: A success message if the file is copied successfully.
         """
-        src_file_path = os.path.join(self.base_path, src_file)
-        dest_file_path = os.path.join(self.base_path, dest_file)
+        src_file_path = Path(self.base_path) / src_file
+        dest_file_path = Path(self.base_path) / dest_file
 
         # Ensure destination directory exists
-        os.makedirs(os.path.dirname(dest_file_path), exist_ok=True)
+        dest_file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if os.path.exists(src_file_path):
+        if src_file_path.exists():
             shutil.copy2(src_file_path, dest_file_path)
             logging.info(f"File '{src_file}' copied successfully to {dest_file_path}!")
             return f"File '{src_file}' copied successfully to {dest_file}!"
@@ -156,13 +156,13 @@ class Tools:
         :param dest_folder: Path to the destination folder (e.g. 'docs_backup' or 'backup/docs').
         :return: A success message if the folder is copied successfully.
         """
-        src_folder_path = os.path.join(self.base_path, src_folder)
-        dest_folder_path = os.path.join(self.base_path, dest_folder)
+        src_folder_path = Path(self.base_path) / src_folder
+        dest_folder_path = Path(self.base_path) / dest_folder
 
         # Ensure parent directory of destination exists
-        os.makedirs(os.path.dirname(dest_folder_path), exist_ok=True)
+        dest_folder_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if os.path.exists(src_folder_path):
+        if src_folder_path.exists():
             shutil.copytree(src_folder_path, dest_folder_path)
             logging.info(
                 f"Folder '{src_folder}' copied successfully to {dest_folder_path}!"
@@ -181,13 +181,13 @@ class Tools:
         :param dest_file: Path to the destination file (e.g. 'final.txt' or 'final/data.json').
         :return: A success message if the file is moved successfully.
         """
-        src_file_path = os.path.join(self.base_path, src_file)
-        dest_file_path = os.path.join(self.base_path, dest_file)
+        src_file_path = Path(self.base_path) / src_file
+        dest_file_path = Path(self.base_path) / dest_file
 
         # Ensure destination directory exists
-        os.makedirs(os.path.dirname(dest_file_path), exist_ok=True)
+        dest_file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if os.path.exists(src_file_path):
+        if src_file_path.exists():
             shutil.move(src_file_path, dest_file_path)
             logging.info(f"File '{src_file}' moved successfully to {dest_file_path}!")
             return f"File '{src_file}' moved successfully to {dest_file}!"
@@ -202,13 +202,13 @@ class Tools:
         :param dest_folder: Path to the destination folder (e.g. 'new_docs' or 'archive/docs').
         :return: A success message if the folder is moved successfully.
         """
-        src_folder_path = os.path.join(self.base_path, src_folder)
-        dest_folder_path = os.path.join(self.base_path, dest_folder)
+        src_folder_path = Path(self.base_path) / src_folder
+        dest_folder_path = Path(self.base_path) / dest_folder
 
         # Ensure parent directory of destination exists
-        os.makedirs(os.path.dirname(dest_folder_path), exist_ok=True)
+        dest_folder_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if os.path.exists(src_folder_path):
+        if src_folder_path.exists():
             shutil.move(src_folder_path, dest_folder_path)
             logging.info(
                 f"Folder '{src_folder}' moved successfully to {dest_folder_path}!"
@@ -226,7 +226,7 @@ class Tools:
         :param path: The path to check.
         :return: True if the path is a file, False otherwise.
         """
-        return os.path.isfile(path)
+        return Path(path).is_file()
 
     def is_directory(self, path: str) -> bool:
         """
@@ -234,7 +234,7 @@ class Tools:
         :param path: The path to check.
         :return: True if the path is a directory, False otherwise.
         """
-        return os.path.isdir(path)
+        return Path(path).is_dir()
 
     def get_file_metadata(self, file_name: str) -> dict:
         """
@@ -242,19 +242,19 @@ class Tools:
         :param file_name: Path to the file to get metadata for (e.g. 'document.txt' or 'images/photo.jpg').
         :return: A dictionary containing the file's metadata.
         """
-        file_path = os.path.join(self.base_path, file_name)
-        if os.path.exists(file_path):
-            metadata = os.stat(file_path)
+        file_path = Path(self.base_path) / file_name
+        if file_path.exists():
+            stat = file_path.stat()
             return {
-                "size": metadata.st_size,
+                "size": stat.st_size,
                 "creation_time": datetime.datetime.fromtimestamp(
-                    metadata.st_ctime
+                    stat.st_ctime
                 ).strftime("%Y-%m-%d %H:%M:%S"),
                 "modification_time": datetime.datetime.fromtimestamp(
-                    metadata.st_mtime
+                    stat.st_mtime
                 ).strftime("%Y-%m-%d %H:%M:%S"),
                 "access_time": datetime.datetime.fromtimestamp(
-                    metadata.st_atime
+                    stat.st_atime
                 ).strftime("%Y-%m-%d %H:%M:%S"),
             }
         else:
@@ -268,21 +268,24 @@ class Tools:
         :param directory: Path to the directory to search in (e.g. '' for current directory, 'src' for src folder).
         :return: A list of file paths that match the search criteria.
         """
-        search_path = os.path.join(self.base_path, directory)
+        search_path = Path(self.base_path) / directory
         matching_files = []
-        for root, dirs, files in os.walk(search_path):
-            for file in files:
-                if keyword in file:
-                    matching_files.append(os.path.join(root, file))
-                else:
-                    file_path = os.path.join(root, file)
-                    try:
-                        with open(file_path, "r") as f:
-                            if keyword in f.read():
-                                matching_files.append(file_path)
-                    except (UnicodeDecodeError, PermissionError):
-                        # Skip files that can't be read as text
-                        pass
+
+        # Функция для проверки содержимого файла
+        def check_file_content(file_path):
+            try:
+                with file_path.open("r") as f:
+                    return keyword in f.read()
+            except (UnicodeDecodeError, PermissionError):
+                # Skip files that can't be read as text
+                return False
+
+        # Поиск по имени и содержимому
+        for file_path in search_path.rglob("*"):
+            if file_path.is_file():
+                if keyword in file_path.name or check_file_content(file_path):
+                    matching_files.append(str(file_path))
+
         logging.info(
             f"Search for keyword '{keyword}' completed with {len(matching_files)} matches!"
         )
