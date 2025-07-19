@@ -29,13 +29,11 @@ class Tools:
         folder_path = Path(self.base_path) / folder_name
         if not folder_path.exists():
             folder_path.mkdir(parents=True)
-            logging.info(
-                f"Folder '{folder_name}' created successfully at {folder_path}!"
-            )
+            logging.info(f"Folder '{folder_name}' created successfully at {folder_path}")
             return f"Folder '{folder_name}' created successfully!"
         else:
-            logging.warning(f"Folder '{folder_name}' already exists at {folder_path}.")
-            return f"Folder '{folder_name}' already exists."
+            logging.warning(f"Folder '{folder_name}' already exists at {folder_path}")
+            return f"Folder '{folder_name}' already exists"
 
     def delete_folder(self, folder_name: str) -> str:
         """
@@ -46,13 +44,11 @@ class Tools:
         folder_path = Path(self.base_path) / folder_name
         if folder_path.exists():
             shutil.rmtree(folder_path)
-            logging.info(
-                f"Folder '{folder_name}' deleted successfully from {folder_path}!"
-            )
-            return f"Folder '{folder_name}' deleted successfully!"
+            logging.info(f"Folder '{folder_name}' deleted successfully from {folder_path}")
+            return f"Folder '{folder_name}' deleted successfully"
         else:
-            logging.warning(f"Folder '{folder_name}' does not exist at {folder_path}.")
-            return f"Folder '{folder_name}' does not exist."
+            logging.warning(f"Folder '{folder_name}' does not exist at {folder_path}")
+            return f"Folder '{folder_name}' does not exist"
 
     def create_file(self, file_name: str, content: str = "") -> str:
         """
@@ -66,7 +62,7 @@ class Tools:
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with file_path.open("w") as file:
             file.write(content)
-        logging.info(f"File '{file_name}' created successfully at {file_path}!")
+        logging.info(f"File '{file_name}' created successfully at {file_path}")
         return f"File '{file_name}' created successfully!"
 
     def delete_file(self, file_name: str) -> str:
@@ -78,11 +74,11 @@ class Tools:
         file_path = Path(self.base_path) / file_name
         if file_path.exists():
             file_path.unlink()
-            logging.info(f"File '{file_name}' deleted successfully from {file_path}!")
-            return f"File '{file_name}' deleted successfully!"
+            logging.info(f"File '{file_name}' deleted successfully from {file_path}")
+            return f"File '{file_name}' deleted successfully"
         else:
-            logging.warning(f"File '{file_name}' does not exist at {file_path}.")
-            return f"File '{file_name}' does not exist."
+            logging.warning(f"File '{file_name}' does not exist at {file_path}")
+            return f"File '{file_name}' does not exist"
 
     def read_file(self, file_name: str) -> str:
         """
@@ -94,11 +90,11 @@ class Tools:
         if file_path.exists():
             with file_path.open("r") as file:
                 content = file.read()
-            logging.info(f"File '{file_name}' read successfully from {file_path}!")
+            logging.info(f"File '{file_name}' read successfully from {file_path}")
             return content
         else:
-            logging.warning(f"File '{file_name}' does not exist at {file_path}.")
-            return f"File '{file_name}' does not exist."
+            logging.warning(f"File '{file_name}' does not exist at {file_path}")
+            return f"File '{file_name}' does not exist"
 
     def write_to_file(self, file_name: str, content: str) -> str:
         """
@@ -112,10 +108,8 @@ class Tools:
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with file_path.open("w") as file:
             file.write(content)
-        logging.info(
-            f"Content written to file '{file_name}' successfully at {file_path}!"
-        )
-        return f"Content written to file '{file_name}' successfully!"
+        logging.info(f"Content written to file '{file_name}' successfully at {file_path}")
+        return f"Content written to file '{file_name}' successfully"
 
     def list_files(self, directory: str = "") -> str:
         """
@@ -125,7 +119,7 @@ class Tools:
         """
         directory_path = Path(self.base_path) / directory
         files = [file.name for file in directory_path.iterdir()]
-        logging.info(f"Files listed successfully from {directory_path}!")
+        logging.info(f"Files listed successfully from {directory_path}")
         return "Files in the specified directory:\n" + "\n".join(files)
 
     def copy_file(self, src_file: str, dest_file: str) -> str:
@@ -143,11 +137,11 @@ class Tools:
 
         if src_file_path.exists():
             shutil.copy2(src_file_path, dest_file_path)
-            logging.info(f"File '{src_file}' copied successfully to {dest_file_path}!")
-            return f"File '{src_file}' copied successfully to {dest_file}!"
+            logging.info(f"File '{src_file}' copied successfully to {dest_file_path}")
+            return f"File '{src_file}' copied successfully to {dest_file}"
         else:
-            logging.warning(f"File '{src_file}' does not exist at {src_file_path}.")
-            return f"File '{src_file}' does not exist."
+            logging.warning(f"File '{src_file}' does not exist at {src_file_path}")
+            return f"File '{src_file}' does not exist"
 
     def copy_folder(self, src_folder: str, dest_folder: str) -> str:
         """
@@ -165,14 +159,14 @@ class Tools:
         if src_folder_path.exists():
             shutil.copytree(src_folder_path, dest_folder_path)
             logging.info(
-                f"Folder '{src_folder}' copied successfully to {dest_folder_path}!"
+                f"Folder '{src_folder}' copied successfully to {dest_folder_path}"
             )
-            return f"Folder '{src_folder}' copied successfully to {dest_folder}!"
+            return f"Folder '{src_folder}' copied successfully to {dest_folder}"
         else:
             logging.warning(
-                f"Folder '{src_folder}' does not exist at {src_folder_path}."
+                f"Folder '{src_folder}' does not exist at {src_folder_path}"
             )
-            return f"Folder '{src_folder}' does not exist."
+            return f"Folder '{src_folder}' does not exist"
 
     def move_file(self, src_file: str, dest_file: str) -> str:
         """
@@ -189,11 +183,11 @@ class Tools:
 
         if src_file_path.exists():
             shutil.move(src_file_path, dest_file_path)
-            logging.info(f"File '{src_file}' moved successfully to {dest_file_path}!")
-            return f"File '{src_file}' moved successfully to {dest_file}!"
+            logging.info(f"File '{src_file}' moved successfully to {dest_file_path}")
+            return f"File '{src_file}' moved successfully to {dest_file}"
         else:
-            logging.warning(f"File '{src_file}' does not exist at {src_file_path}.")
-            return f"File '{src_file}' does not exist."
+            logging.warning(f"File '{src_file}' does not exist at {src_file_path}")
+            return f"File '{src_file}' does not exist"
 
     def move_folder(self, src_folder: str, dest_folder: str) -> str:
         """
@@ -211,14 +205,14 @@ class Tools:
         if src_folder_path.exists():
             shutil.move(src_folder_path, dest_folder_path)
             logging.info(
-                f"Folder '{src_folder}' moved successfully to {dest_folder_path}!"
+                f"Folder '{src_folder}' moved successfully to {dest_folder_path}"
             )
-            return f"Folder '{src_folder}' moved successfully to {dest_folder}!"
+            return f"Folder '{src_folder}' moved successfully to {dest_folder}"
         else:
             logging.warning(
-                f"Folder '{src_folder}' does not exist at {src_folder_path}."
+                f"Folder '{src_folder}' does not exist at {src_folder_path}"
             )
-            return f"Folder '{src_folder}' does not exist."
+            return f"Folder '{src_folder}' does not exist"
 
     def is_file(self, path: str) -> bool:
         """
@@ -236,30 +230,24 @@ class Tools:
         """
         return Path(path).is_dir()
 
-    def get_file_metadata(self, file_name: str) -> dict:
+    def get_file_metadata(self, file_name: str) -> str:
         """
         Get metadata of a file.
         :param file_name: Path to the file to get metadata for (e.g. 'document.txt' or 'images/photo.jpg').
-        :return: A dictionary containing the file's metadata.
+        :return: A string containing the file's metadata.
         """
         file_path = Path(self.base_path) / file_name
         if file_path.exists():
             stat = file_path.stat()
-            return {
-                "size": stat.st_size,
-                "creation_time": datetime.datetime.fromtimestamp(
-                    stat.st_ctime
-                ).strftime("%Y-%m-%d %H:%M:%S"),
-                "modification_time": datetime.datetime.fromtimestamp(
-                    stat.st_mtime
-                ).strftime("%Y-%m-%d %H:%M:%S"),
-                "access_time": datetime.datetime.fromtimestamp(
-                    stat.st_atime
-                ).strftime("%Y-%m-%d %H:%M:%S"),
-            }
+            size = stat.st_size
+            creation_time = datetime.datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d %H:%M:%S")
+            modification_time = datetime.datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+            access_time = datetime.datetime.fromtimestamp(stat.st_atime).strftime("%Y-%m-%d %H:%M:%S")
+
+            return f"size: {size}\ncreation_time: {creation_time}\nmodification_time: {modification_time}\naccess_time: {access_time}"
         else:
-            logging.warning(f"File '{file_name}' does not exist at {file_path}.")
-            return f"File '{file_name}' does not exist."
+            logging.warning(f"File '{file_name}' does not exist at {file_path}")
+            return f"File '{file_name}' does not exist"
 
     def search_files(self, keyword: str, directory: str = "") -> list:
         """
@@ -287,6 +275,6 @@ class Tools:
                     matching_files.append(str(file_path))
 
         logging.info(
-            f"Search for keyword '{keyword}' completed with {len(matching_files)} matches!"
+            f"Search for keyword '{keyword}' completed with {len(matching_files)} matches"
         )
         return matching_files

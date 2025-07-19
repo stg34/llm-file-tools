@@ -3,7 +3,7 @@ import shutil
 import tempfile
 import unittest
 from file_tools import Tools
-
+from pathlib import Path
 
 class TestTools(unittest.TestCase):
     def setUp(self):
@@ -291,18 +291,17 @@ class TestTools(unittest.TestCase):
         # Создаем файл для тестирования метаданных
         file_name = "metadata_test.txt"
         content = "This is test content for metadata."
-        file_path = os.path.join(self.temp_dir, file_name)
-        with open(file_path, 'w') as f:
+        file_path = Path(self.temp_dir) / file_name
+        with file_path.open('w') as f:
             f.write(content)
 
         # Тест получения метаданных
         metadata = self.tools.get_file_metadata(file_name)
-        self.assertIsInstance(metadata, dict)
-        self.assertIn("size", metadata)
-        self.assertEqual(metadata["size"], len(content))
-        self.assertIn("creation_time", metadata)
-        self.assertIn("modification_time", metadata)
-        self.assertIn("access_time", metadata)
+        self.assertIsInstance(metadata, str)
+        self.assertIn(f"size: {len(content)}", metadata)
+        self.assertIn("creation_time:", metadata)
+        self.assertIn("modification_time:", metadata)
+        self.assertIn("access_time:", metadata)
 
         # Тест получения метаданных несуществующего файла
         result = self.tools.get_file_metadata("nonexistent_file.txt")
