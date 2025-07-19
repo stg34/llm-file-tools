@@ -20,6 +20,17 @@ class Tools:
     def __init__(self):
         self.base_path = '/path/to/folder/'
 
+    def list_files(self, directory: str = "") -> str:
+        """
+        List all files in the specified directory.
+        :param directory: Path to the directory to list (e.g. '' for current directory, 'docs' for docs folder).
+        :return: A list of files in the specified directory.
+        """
+        directory_path = Path(self.base_path) / directory
+        files = [file.name for file in directory_path.iterdir()]
+        logging.info(f"Files listed successfully from {directory_path}")
+        return "Files in the specified directory:\n" + "\n".join(files)
+
     def create_folder(self, folder_name: str) -> str:
         """
         Create a new folder.
@@ -111,17 +122,6 @@ class Tools:
         logging.info(f"Content written to file '{file_name}' successfully at {file_path}")
         return f"Content written to file '{file_name}' successfully"
 
-    def list_files(self, directory: str = "") -> str:
-        """
-        List all files in the specified directory.
-        :param directory: Path to the directory to list (e.g. '' for current directory, 'docs' for docs folder).
-        :return: A list of files in the specified directory.
-        """
-        directory_path = Path(self.base_path) / directory
-        files = [file.name for file in directory_path.iterdir()]
-        logging.info(f"Files listed successfully from {directory_path}")
-        return "Files in the specified directory:\n" + "\n".join(files)
-
     def copy_file(self, src_file: str, dest_file: str) -> str:
         """
         Copy a file from source to destination.
@@ -158,14 +158,10 @@ class Tools:
 
         if src_folder_path.exists():
             shutil.copytree(src_folder_path, dest_folder_path)
-            logging.info(
-                f"Folder '{src_folder}' copied successfully to {dest_folder_path}"
-            )
+            logging.info(f"Folder '{src_folder}' copied successfully to {dest_folder_path}")
             return f"Folder '{src_folder}' copied successfully to {dest_folder}"
         else:
-            logging.warning(
-                f"Folder '{src_folder}' does not exist at {src_folder_path}"
-            )
+            logging.warning(f"Folder '{src_folder}' does not exist at {src_folder_path}")
             return f"Folder '{src_folder}' does not exist"
 
     def move_file(self, src_file: str, dest_file: str) -> str:
@@ -204,14 +200,10 @@ class Tools:
 
         if src_folder_path.exists():
             shutil.move(src_folder_path, dest_folder_path)
-            logging.info(
-                f"Folder '{src_folder}' moved successfully to {dest_folder_path}"
-            )
+            logging.info(f"Folder '{src_folder}' moved successfully to {dest_folder_path}")
             return f"Folder '{src_folder}' moved successfully to {dest_folder}"
         else:
-            logging.warning(
-                f"Folder '{src_folder}' does not exist at {src_folder_path}"
-            )
+            logging.warning(f"Folder '{src_folder}' does not exist at {src_folder_path}")
             return f"Folder '{src_folder}' does not exist"
 
     def is_file(self, path: str) -> bool:
@@ -274,7 +266,5 @@ class Tools:
                 if keyword in file_path.name or check_file_content(file_path):
                     matching_files.append(str(file_path))
 
-        logging.info(
-            f"Search for keyword '{keyword}' completed with {len(matching_files)} matches"
-        )
+        logging.info(f"Search for keyword '{keyword}' completed with {len(matching_files)} matches")
         return matching_files
