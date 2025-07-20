@@ -24,12 +24,28 @@ class Tools:
         """
         List all files in the specified directory.
         :param directory: Path to the directory to list (e.g. '' for current directory, 'docs' for docs folder).
-        :return: A list of files in the specified directory.
+        :return: A list of files in the specified directory with directories marked with a trailing slash.
         """
         directory_path = Path(self.base_path) / directory
-        files = [file.name for file in directory_path.iterdir()]
+
+        # Разделяем файлы и директории
+        directories = []
+        files = []
+
+        for entry in directory_path.iterdir():
+            if entry.is_dir():
+                directories.append(f"{entry.name}/")
+            else:
+                files.append(entry.name)
+
+        # Сортируем каждую группу по имени и объединяем
+        directories.sort()
+        files.sort()
+        all_entries = directories + files
+
+        result = "Files in the specified directory:\n" + "\n".join(all_entries)
         logging.info(f"Files listed successfully from {directory_path}")
-        return "Files in the specified directory:\n" + "\n".join(files)
+        return result
 
     def create_folder(self, folder_name: str) -> str:
         """

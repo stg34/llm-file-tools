@@ -138,7 +138,14 @@ class TestTools(unittest.TestCase):
         result = self.tools.list_files()
         for file_name in file_names:
             self.assertIn(file_name, result)
-        self.assertIn(subfolder, result)
+        self.assertIn(subfolder + "/", result)  # Проверяем, что директория отмечена слешем
+
+        # Проверяем порядок сортировки - директории должны быть перед файлами
+        result_lines = result.strip().split("\n")[1:]  # Пропускаем заголовок
+        if result_lines:
+            if len(result_lines) > 1:
+                # Если есть и директории, и файлы, проверяем, что директории идут первыми
+                self.assertTrue(result_lines[0].endswith("/"), "Директории должны быть перечислены первыми")
 
         # Тест списка файлов в подпапке
         result = self.tools.list_files(subfolder)
